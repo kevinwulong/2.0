@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>贪吃蛇</title>
+	<script src="jquery.js"></script>
+	<style>
+	*{
+		padding:0;
+		margin:0;
+		font-family: 微软雅黑;
+	}
+	#div1{
+		width:38px;
+		height:38px;
+		border:1px solid blue;
+		border-radius: 50%;
+		background-color:#ccc;
+		position: absolute;
+		top:40px;
+		left:40px;
+		display: none;
+	}
+	.food{
+		width:38px;
+		height: 38px;
+		border:1px solid black;
+		border-radius: 50%;
+		position: absolute;
+		background-color:rgb(255,144,20);
+	}
+	.tail{
+		width:38px;
+		height:38px;
+		background-color:black;
+		border:1px solid #ccc;
+		border-radius:50%;
+		position: absolute;
+		top:40px;
+		left:-100px;
+	}
+	#start{
+		width:300px;
+		height:200px;
+		font-size: 50px;
+		line-height: 50px;
+		text-align: center;
+		border:5px soild black;
+		border-radius: 10px;
+		position: absolute;
+		top:400px;
+		left:750px;
+		cursor:pointer;
+	}
+	</style>
+</head>
+<body>
+	<input id="start" value="开始">
+<article>
+	<div id="div1">
+	</div>
+	
+</article>
+
+
+<script type="text/javascript">
+var timer;
+var start = true;
+window.onload=function(){
+
+	$("#start").click(function(){
+
+		start = false;
+		$("#div1").show();
+		$(this).hide();
+		animate( {left:"+=40px"});
+		if(!start){
+			food();
+			$(document).keydown(function(event){			
+				var keycode = (event.keyCode ? event.keyCode : event.which);  
+					if(keycode == '39'){noback(-40,0);animate( {left:"+=40px"});}
+					if(keycode == '37'){noback(+40,0);animate( {left:"-=40px"});}
+					if(keycode == '38'){noback(0,+40);animate( {top: "-=40px"});}
+					if(keycode == '40'){noback(0,-40);animate( {top: "+=40px"});}
+			})
+		}
+
+	})
+}
+
+
+function animate(num){
+	if( $("div1").is(":animated") ){
+		return false;
+	}
+	clearInterval(timer);
+	timer=setInterval(function(){
+		eat();
+		over();
+		$("#div1").animate(num,1);
+		bodyall();	
+	},100);
+}
+//food消失
+function eat(){
+	var divset = $("#div1");
+	var foodset = $(".food");
+	if(		parseInt(foodset.css("left")) == parseInt(divset.css("left"))
+		&&  parseInt(foodset.css("top"))  == parseInt(divset.css("top"))
+	  ){	//元素被吃掉 删除 出现新food tail出现
+	  		foodset.remove();
+			food();
+			tail();	
+	}
+}
+
+function food(){
+	var fd = $('<div class="food"></div>');
+	var xindex= Math.round(Math.random()*10)*160
+	var	yindex= Math.round(Math.random()*10)*80;
+	//如果生成在身体元素上 递归自己
+	if(parseInt($(".tail").css("left")) == xindex
+		&& parseInt($(".tail").css("top")) == yindex)
+	{
+		food();
+	}
+	fd.offset({top:yindex,left:xindex});
+
+	$(document.body).append(fd);
+}
+
+
+//tail出现
+function tail(){
+
+	var tail=$("<div class='tail'></div>");
+	$("article").append(tail);
+}
+//游戏结束
+function over(){
+
+	var divset = $("#div1");
+	//碰到四面八方游戏结束
+	if(parseInt(divset.css("left")) < 0 || parseInt(divset.css("left")) > 1880 ||
+		parseInt(divset.css("top")) < 0 || parseInt(divset.css("top"))>= 890)
+	{
+		alert("Game Over!");
+		window.location.reload();
+	}
+}
+//不能倒走
+function noback(num1,num2){
+	var divset = $("#div1");
+	var tailset = $(".tail");
+	//蛇反方向咬自己？
+	if(		parseInt(tailset.css("left")) +num1 ==parseInt(divset.css("left"))
+		&&  parseInt(tailset.css("top")) +num2 == parseInt(divset.css("top"))
+	  ){	
+			alert("Game Over!");
+			window.location.reload();
+			}
+	}
+//body
+function bodyall(){
+	if( !$(".tail").length ==0){
+		var divleft = $("div").offset().left;
+		var divtop = $("div").offset().top;
+		var divleft2=$("div.tail").prev().offset().left;
+		var divtop2=$("div.tail").prev().offset().top;
+
+		//第一个身体元素
+		$(".tail:first").animate({
+				left:divleft,
+				top:divtop
+		},1)
+		//所有的身体元素
+		$(".tail").each(function(){
+
+			$(this).animate({
+
+				left:$(this).prev().offset().left,
+				top: $(this).prev().offset().top
+			},1)
+
+			if($(this).css("left") == $("#div1").css("left") && $(this).css("top") == $("#div1").css("top")){
+
+				alert("玩蛋吧你！");
+				window.location.reload();
+			}
+		
+		})
+
+			
+	}
+}
+
+</script>
+</body>
+</html>
