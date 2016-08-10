@@ -147,20 +147,11 @@
 	text-align: center;
 	margin:20px 5px;
 }
-#div4_one{
-	position:absolute;
-	top:250px;
-	left:100px;
-}
-#div4_two{
-	position:absolute;
-	top:250px;
-	left:700px;
-}
-#div4_three{
-	position:absolute;
-	top:250px;
-	left:1300px;
+#div4 >div{
+	width:500px;
+	height: 400px;
+	float: left;
+	margin:50px 220px;
 }
 #summary-container{
 	position: absolute;
@@ -203,16 +194,26 @@
 #div6 h1{
 	position: absolute;
 	top:200px;
-	left:800px;
+	left:650px;
 	font-size: 70px;
 }
 #div6 p{
-	position: absolute;
-	top:400px;
-	left:850px;
+	display: block;
+	margin:0 auto;
 	font-size: 25px;
 }
-#div6 p span{
-	color:white;
-	text-align: center;
+#div6 >div{
+	position: absolute;
+	top:400px;
+	left:780px;
+}
+#div6 >div p{
+	margin:10px;
+}
+#div6 >div p span{
+	color: white;
+}
+#div6 >div p a{
+	text-decoration: none;
+	color: black;
 }
