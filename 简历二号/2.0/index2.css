@@ -26,6 +26,7 @@
 #div1{
 	background-color:#CCCC99;
 	position: relative;
+	top:50px;
 }
 #div1 img{
 	width:200px;
